@@ -9,11 +9,12 @@ import (
 )
 
 func main() {
+	flag.CommandLine.Usage = usage
 	name := flag.String("n", "", "The `name` of the template to be rendered. If empty defaults to the first specified argument")
 	flag.Parse()
 
 	if flag.NArg() < 1 {
-		die(fmt.Errorf("No input templates provided"))
+		die(fmt.Errorf("no files provided"))
 	}
 
 	envs := os.Environ()
@@ -36,6 +37,11 @@ func main() {
 	if err != nil {
 		die(err)
 	}
+}
+
+func usage() {
+	fmt.Fprintf(os.Stderr, "USAGE: %s [flag]... [file]...\nAvailable flags:\n", os.Args[0])
+	flag.PrintDefaults()
 }
 
 func die(err error) {
